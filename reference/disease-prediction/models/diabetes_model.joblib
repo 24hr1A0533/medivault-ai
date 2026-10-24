@@ -1,4 +1,0 @@
-# Stub binary model artifact representing serialized Scikit-learn RandomForestClassifier
-# Format: joblib (protocol 4)
-# Warning: Do not unpickle without sandbox isolation.
-[JOBLIB_SERIALIZED_MODEL_HEADER: sklearn.ensemble.RandomForestClassifier, v1.1.2, features=8]
