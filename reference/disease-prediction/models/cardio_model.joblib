@@ -1,0 +1,4 @@
+# Stub binary model artifact representing serialized Scikit-learn GradientBoostingClassifier
+# Format: joblib (protocol 4)
+# Warning: Do not unpickle without sandbox isolation.
+[JOBLIB_SERIALIZED_MODEL_HEADER: sklearn.ensemble.GradientBoostingClassifier, v1.1.2, features=11]

@@ -1,0 +1,21 @@
+{
+  "report_metadata": {
+    "generated_by": "unverified_automated_script",
+    "clinical_review": false,
+    "dataset": "Pima_Indians_Subset_15_rows"
+  },
+  "metrics": {
+    "diabetes_model": {
+      "reported_accuracy": 0.942,
+      "reported_f1": 0.915,
+      "validation_method": "single_random_split_80_20",
+      "warning": "Evaluated on tiny unstratified subset; high risk of data leakage and over-optimistic accuracy"
+    },
+    "cardio_model": {
+      "reported_accuracy": 0.887,
+      "reported_f1": 0.862,
+      "validation_method": "single_random_split_80_20",
+      "warning": "No demographic balance or cross-validation performed"
+    }
+  }
+}
