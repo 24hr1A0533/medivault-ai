@@ -1,0 +1,141 @@
+# Stateful Backing Services Manifests (PostgreSQL, Redis, Qdrant)
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres-statefulset
+  namespace: medivault-production
+spec:
+  serviceName: postgres-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-db
+  template:
+    metadata:
+      labels:
+        app: postgres-db
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              value: "medivault_prod_user"
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: medivault-secrets
+                  key: SECRET_KEY
+            - name: POSTGRES_DB
+              value: "medivault_clinical_db"
+          resources:
+            requests:
+              cpu: "1000m"
+              memory: "2Gi"
+            limits:
+              cpu: "4000m"
+              memory: "8Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-rw
+  namespace: medivault-production
+spec:
+  type: ClusterIP
+  selector:
+    app: postgres-db
+  ports:
+    - port: 5432
+      targetPort: 5432
+---
+# Redis High Performance Cache
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-deployment
+  namespace: medivault-production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis-cache
+  template:
+    metadata:
+      labels:
+        app: redis-cache
+    spec:
+      containers:
+        - name: redis
+          image: redis:7.2-alpine
+          ports:
+            - containerPort: 6379
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+            limits:
+              cpu: "2000m"
+              memory: "4Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-master
+  namespace: medivault-production
+spec:
+  type: ClusterIP
+  selector:
+    app: redis-cache
+  ports:
+    - port: 6379
+      targetPort: 6379
+---
+# Qdrant Vector Search Engine
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qdrant-deployment
+  namespace: medivault-production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qdrant-db
+  template:
+    metadata:
+      labels:
+        app: qdrant-db
+    spec:
+      containers:
+        - name: qdrant
+          image: qdrant/qdrant:v1.7.4
+          ports:
+            - containerPort: 6333
+            - containerPort: 6334
+          resources:
+            requests:
+              cpu: "1000m"
+              memory: "2Gi"
+            limits:
+              cpu: "4000m"
+              memory: "8Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qdrant-service
+  namespace: medivault-production
+spec:
+  type: ClusterIP
+  selector:
+    app: qdrant-db
+  ports:
+    - name: http
+      port: 6333
+      targetPort: 6333
+    - name: grpc
+      port: 6334
+      targetPort: 6334

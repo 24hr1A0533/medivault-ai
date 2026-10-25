@@ -1,0 +1,31 @@
+from .document_schema import (
+    VerificationStatus,
+    DocumentCategory,
+    PatientDetails,
+    LabTestItem,
+    MedicalData,
+    PrescriptionItem,
+    StructuredMedicalDocument,
+    VerificationAction,
+    VerificationRequest,
+    DocumentProcessResponse,
+    VectorQueryRequest,
+    VectorSearchResultItem,
+    VectorQueryResponse,
+)
+
+__all__ = [
+    "VerificationStatus",
+    "DocumentCategory",
+    "PatientDetails",
+    "LabTestItem",
+    "MedicalData",
+    "PrescriptionItem",
+    "StructuredMedicalDocument",
+    "VerificationAction",
+    "VerificationRequest",
+    "DocumentProcessResponse",
+    "VectorQueryRequest",
+    "VectorSearchResultItem",
+    "VectorQueryResponse",
+]

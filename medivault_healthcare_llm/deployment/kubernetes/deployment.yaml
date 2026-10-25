@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: medivault-vllm-deployment
+  namespace: medivault-ai
+  labels:
+    app: medivault-healthcare-llm
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: medivault-healthcare-llm
+  template:
+    metadata:
+      labels:
+        app: medivault-healthcare-llm
+    spec:
+      containers:
+      - name: vllm-server
+        image: medivault/healthcare-llm:v1.0.0
+        imagePullPolicy: IfNotPresent
+        command:
+        - python3
+        - -m
+        - vllm.entrypoints.openai.api_server
+        args:
+        - --model=/models/medivault-qwen-2.5-7b-merged
+        - --tensor-parallel-size=1
+        - --max-model-len=8192
+        - --gpu-memory-utilization=0.92
+        - --enable-prefix-caching
+        - --trust-remote-code
+        - --port=8000
+        ports:
+        - containerPort: 8000
+          name: http
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+            memory: "32Gi"
+            cpu: "8"
+          requests:
+            nvidia.com/gpu: 1
+            memory: "24Gi"
+            cpu: "4"
+        volumeMounts:
+        - name: model-storage
+          mountPath: /models
+          readOnly: true
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 45
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 60
+          periodSeconds: 15
+      volumes:
+      - name: model-storage
+        persistentVolumeClaim:
+          claimName: pvc-medivault-models
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: medivault-vllm-service
+  namespace: medivault-ai
+spec:
+  type: ClusterIP
+  selector:
+    app: medivault-healthcare-llm
+  ports:
+  - port: 8000
+    targetPort: 8000
+    name: http

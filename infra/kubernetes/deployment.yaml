@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: medivault-api-deployment
+  namespace: medivault-production
+  labels:
+    app.kubernetes.io/name: medivault-api
+    app.kubernetes.io/part-of: medivault-hos
+    app.kubernetes.io/version: 2.5.0
+spec:
+  replicas: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: medivault-api
+  template:
+    metadata:
+      labels:
+        app: medivault-api
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+        prometheus.io/path: "/metrics"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+      containers:
+        - name: medivault-api
+          image: ghcr.io/medivault/medivault-api:2.5.0
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: medivault-config
+            - secretRef:
+                name: medivault-secrets
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              cpu: "1000m"
+              memory: "2Gi"
+            limits:
+              cpu: "4000m"
+              memory: "8Gi"
+          ports:
+            - name: http-api
+              containerPort: 8000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 20
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: medivault-api-service
+  namespace: medivault-production
+  labels:
+    app: medivault-api
+spec:
+  type: ClusterIP
+  selector:
+    app: medivault-api
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8000

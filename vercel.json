@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "buildCommand": "cd medivault-ai/frontend && npm install && npm run build",
+  "outputDirectory": "medivault-ai/frontend/dist",
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

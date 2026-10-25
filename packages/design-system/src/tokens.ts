@@ -1,0 +1,30 @@
+export const tokens = {
+  colors: {
+    brandPrimary: "#0F766E",
+    brandHover: "#115E59",
+    brandLight: "#CCFBF1",
+    brandSecondary: "#0891B2",
+    clinicalEmergency: "#DC2626",
+    clinicalEmergencyGlow: "rgba(220, 38, 38, 0.25)",
+    clinicalWarning: "#F59E0B",
+    clinicalSuccess: "#16A34A",
+    clinicalInfo: "#2563EB",
+    surfaceLight: "#F8FAFC",
+    surfacePanel: "#FFFFFF",
+    surfaceBorder: "#E2E8F0",
+    textPrimary: "#0F172A",
+    textSecondary: "#475569",
+    surfaceDark: "#090D16",
+    surfacePanelDark: "#131B2E",
+  },
+  typography: {
+    fontSans: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+    fontMono: "'JetBrains Mono', monospace",
+  },
+  radii: {
+    sm: "4px",
+    md: "8px",
+    lg: "12px",
+    full: "9999px",
+  },
+};

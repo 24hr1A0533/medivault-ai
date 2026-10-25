@@ -1,0 +1,17 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: "medivault-api"
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ["medivault-api:8000"]
+
+  - job_name: "redis-metrics"
+    static_configs:
+      - targets: ["redis-cache:6379"]
+
+  - job_name: "postgres-metrics"
+    static_configs:
+      - targets: ["postgres-db:5432"]

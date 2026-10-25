@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  medivault-medical-llm:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: medivault_medical_llm_service
+    restart: unless-stopped
+    ports:
+      - "8006:8006"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - CHROMA_PERSIST_DIRECTORY=/app/data/chroma_medical_llm
+      - VLLM_API_BASE=http://vllm-inference:8000/v1
+    depends_on:
+      - vllm-inference
+
+  vllm-inference:
+    image: vllm/vllm-openai:v0.6.3
+    container_name: medivault_vllm_engine
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./models:/models
+    command: >
+      --model Qwen/Qwen2.5-7B-Instruct
+      --host 0.0.0.0
+      --port 8000
+      --gpu-memory-utilization 0.92
+      --max-model-len 8192
+      --enable-prefix-caching
+      --trust-remote-code
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]

@@ -1,0 +1,9 @@
+{
+  "name": "@medivault/emergency-console",
+  "version": "2.5.0",
+  "private": true,
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}

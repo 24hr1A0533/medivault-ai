@@ -1,0 +1,67 @@
+{
+  "system": "MediVault Enterprise Hospital Design System",
+  "version": "2.0.0",
+  "palette": {
+    "primary": {
+      "main": "#0F766E",
+      "dark": "#115E59",
+      "light": "#CCFBF1",
+      "contrastText": "#FFFFFF"
+    },
+    "secondary": {
+      "main": "#0891B2",
+      "dark": "#0E7490",
+      "light": "#CFFAFE",
+      "contrastText": "#FFFFFF"
+    },
+    "success": {
+      "main": "#22C55E",
+      "dark": "#15803D",
+      "bg": "#F0FDF4",
+      "contrastText": "#FFFFFF"
+    },
+    "warning": {
+      "main": "#F59E0B",
+      "dark": "#B45309",
+      "bg": "#FEF3C7",
+      "contrastText": "#1E293B"
+    },
+    "danger": {
+      "main": "#DC2626",
+      "dark": "#991B1B",
+      "bg": "#FEF2F2",
+      "contrastText": "#FFFFFF"
+    },
+    "background": {
+      "app": "#F8FAFC",
+      "surface": "#FFFFFF",
+      "surfaceElevated": "#F1F5F9",
+      "hudDark": "#0F172A"
+    },
+    "text": {
+      "primary": "#0F172A",
+      "secondary": "#475569",
+      "muted": "#94A3B8",
+      "emergencyHUD": "#F8FAFC"
+    },
+    "border": {
+      "subtle": "#E2E8F0",
+      "strong": "#94A3B8",
+      "emergency": "#DC2626"
+    }
+  },
+  "typography": {
+    "fontFamily": "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    "monoFamily": "'SF Mono', 'JetBrains Mono', 'Roboto Mono', monospace",
+    "h1": { "fontSize": "28px", "fontWeight": 700, "lineHeight": "36px" },
+    "h2": { "fontSize": "22px", "fontWeight": 600, "lineHeight": "28px" },
+    "h3": { "fontSize": "18px", "fontWeight": 600, "lineHeight": "24px" },
+    "body1": { "fontSize": "14px", "fontWeight": 400, "lineHeight": "20px" },
+    "clinicalMetrics": { "fontSize": "20px", "fontWeight": 700, "lineHeight": "26px" }
+  },
+  "metrics": {
+    "touchTargetMinPx": 48,
+    "emergencyOpenTargetS": 1.8,
+    "hudBorderRadiusPx": 12
+  }
+}

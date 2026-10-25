@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: medivault-frontend-deployment
+  namespace: medivault-production
+  labels:
+    app.kubernetes.io/name: medivault-frontend
+    app.kubernetes.io/part-of: medivault-hos
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: medivault-frontend
+  template:
+    metadata:
+      labels:
+        app: medivault-frontend
+    spec:
+      containers:
+        - name: medivault-frontend
+          image: ghcr.io/medivault/medivault-frontend:2.5.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 15
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: medivault-frontend-service
+  namespace: medivault-production
+  labels:
+    app: medivault-frontend
+spec:
+  type: ClusterIP
+  selector:
+    app: medivault-frontend
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
